@@ -1,0 +1,11 @@
+{
+	"snmpEndpoint":
+	{
+		"host": "home.solarisfire.com",
+		"port": "161",
+		"publicString": "Quan7umL3ap",
+		"version" : "2c"
+	}
+
+}
+
