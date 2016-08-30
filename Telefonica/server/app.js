@@ -1,8 +1,10 @@
 "use strict";
 
 var snmpRepo = require("./Statistics/ServerStatistics.js");
+var snmpRepoPromise = require("./Statistics/ServerStatisticsPromise.js");
 
-console.log(snmpRepo.getServerStats());
+console.log("Main - " + snmpRepo.getServerStats().OneMinAverageLoad);
+//console.log("Main - " + snmpRepoPromise.getStats());
 // let jsonContent = snmpRepo.getServerStatsMock();
 
 // console.log("RAM \n Total - " + jsonContent.stats.ram.total);

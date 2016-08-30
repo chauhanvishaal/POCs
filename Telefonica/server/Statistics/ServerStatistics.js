@@ -1,4 +1,14 @@
 "use strict";
+let debug = require("debug");
+let log = debug('ServerStatistics:log');
+log("test log message");
+let logError = debug('ServerStatistics:error');
+logError("test error message");
+// var log1 = log("app:log");
+// log1.log = console.log.bind(console);
+// log1("log1 msg");
+
+//log.error = console.error.bind(console);
 
 let config = require("../config.json");
 let snmp = require("net-snmp");
@@ -23,21 +33,27 @@ let session  = snmp.createSession (
 	config.snmpEndpoint.publicString,
 	options);
 
+//var stats = getServerStats();
+log("From log - Main stats = ");
+
+
 //Mock method
 exports.getServerStatsMock = function(){
   let mockData  = require("./ServerStatisticsMockData.json");
   return mockData;
 };
 
-exports.getServerStats = function(){
-
+exports.getServerStats = function (){
+//function getServerStats (){
 	let stats = responseBuilder();
-	console.log ("getServerStats - stats =" + stats);
+	log ("getServerStats - stats =" + stats);
 
 	session.trap(snmp.TrapType.LinkDown,function(error){
 		if(error)
-			console.error("LinkDown: " + error);
+			logError("LinkDown: " + error);
 	});
+
+	return stats ;
 };
 
 function responseBuilder(){
@@ -48,13 +64,13 @@ function responseBuilder(){
 	var responseBuilderCallBack = function(oidValue){
 		//assign values to the object properties created earlier
 		stats[oidElement] = oidValue ;
-		console.log("responseBuilderCallBack - " + oidValue );
-		console.log("responseBuilderCallBack stats object - " + JSON.stringify(stats));		
+		log("responseBuilderCallBack - " + oidValue );
+		log("responseBuilderCallBack stats object - " + JSON.stringify(stats));		
 		return stats ;
 	};
 
 	for(oidElement in config.oids){
-		//console.log(config.oids[oid]);
+		//log(config.oids[oid]);
 		//getResource(Array.from(config.oids[oid]));
 		let oidKey = config.oids[oidElement] ;
 		oidArray.push(oidKey);
@@ -62,13 +78,14 @@ function responseBuilder(){
 		let oidValue = getResource(oidArray,responseBuilderCallBack);
 
 		//Add each oid key/ value to object
-		console.log("oidValue =" + oidValue);
-		//create return object properties
-		stats[oidElement] = "";
+		log("oidValue =" + oidValue);
+		//create return object properties with empty values
+		stats[oidElement] = "null";
+		//keep only one oid in the oidArray, so pop the current
 		oidArray.pop();
 	}
 
-	console.log("responseBuilder stats object - ", stats);
+	log("responseBuilder stats object - ", stats);
 	return stats;
 };
 
@@ -76,21 +93,21 @@ function getResource(oid,responseBuilderCallBack){
 
 	let oidCallBack = function (oidValue){ 
 		
-		console.log("oidCallBack oidvalue - " + oidValue);
+		log("oidCallBack oidvalue - " + oidValue);
 		//response = oidValue ; 
-		responseBuilderCallBack(oidValue);
+		return responseBuilderCallBack(oidValue);
 	};
 
 	function snmpSessionCallBack (error, varbinds){
 		let retValue ;
 		if(error){
-			console.error(error);
+			logError(error);
 			return oidCallBack("");
 		} else {
 			for(let i = 0; i < varbinds.length;i++)
 			{
 				if(snmp.isVarbindError(varbinds[i])){
-					console.error("VarbindError:" + snmp.varbindError(varbinds[i]))
+					logError("VarbindError:" + snmp.varbindError(varbinds[i]))
 					//Todo : log error
 					//oidValue = "";
 					retValue = "";
@@ -98,43 +115,18 @@ function getResource(oid,responseBuilderCallBack){
 				}
 				else
 				{
-					//console.log(varbinds[i].oid + " = " + varbinds[i].value);
+					//log(varbinds[i].oid + " = " + varbinds[i].value);
 					retValue = varbinds[i].value;
 					return oidCallBack(varbinds[i].value);
 				}
 			}
 		}
 
-		//console.log(varbinds[0].oid + " = " + varbinds[i].value);
+		//log(varbinds[0].oid + " = " + varbinds[i].value);
 		//return varbinds[i].value ;
 	};
 	
-	function snmpSessionPromise (error, varbinds){
-		let retValue ;
-		if(error){
-			console.error(error);
-		} else {
-			for(let i = 0; i < varbinds.length;i++)
-			{
-				if(snmp.isVarbindError(varbinds[i])){
-					console.error("VarbindError:", snmp.varbindError(varbinds[i]))
-					//Todo : log error
-					//oidValue = "";
-				
-				}
-				else
-				{
-					console.log(varbinds[i].oid, " = " , varbinds[i].value)
-					//oidValue = varbinds[i].value ;
-					//return oidCallBack(varbinds[i].value);
-					retValue = varbinds[i].value ;
-				}
-			}
-		}
-		return retValue ;
-	};
-
-	session.get (oid, snmpSessionCallBack);
+	return session.get (oid, snmpSessionCallBack);
 	//return response;
 
 	// var deferred = Q.defer();
@@ -148,11 +140,6 @@ function getResource(oid,responseBuilderCallBack){
 	// 	function(){
 	// 		return retValue ;
 	// 	});
-
-
-
-
-	
 	
 };
 

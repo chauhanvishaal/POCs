@@ -4,8 +4,9 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "net-snmp": "^1.1.19",
-    "Q": "^0.0.1"
+    "Q": "^0.0.1",
+    "debug": "^2.2.0",
+    "net-snmp": "^1.1.19"
   },
   "devDependencies": {},
   "scripts": {
