@@ -35,9 +35,12 @@ exports.getServerStatsMock = function(){
 exports.getServerStats = function (){
 //function getServerStats (){
 	let requestOids = createRequest();
-	log ("getServerStats - stats =" + requestOids);
+	log ("getServerStats - requestOids =" + requestOids);
 	getResource(requestOids);
-	log("In createRequest, Post getResource(), oidValues length = ", oidValues.size);
+	// .then(function(){
+	// 	responseBuilder;
+	// });
+	log("In getServerStats, Post getResource(), oidValues length = ", oidValues.size);
 
 	session.trap(snmp.TrapType.LinkDown,function(error){
 		if(error)
@@ -45,11 +48,6 @@ exports.getServerStats = function (){
 	});
 
 	return requestOids ;
-};
-
-function responseBuilder(response){
-	log("In responseBuilder response.length" + response.size );
-	log("In responseBuilder oidValues.length" + oidValues.size );
 };
 
 function createRequest(){
@@ -64,17 +62,12 @@ function createRequest(){
 	return oidArray;
 };
 
-function getResource(oids){
-	let oidArray = [];
-	let stats = {};
-	let oidElement;
+function responseBuilder(response){
+	log("In responseBuilder response.length" + response.size );
+	log("In responseBuilder oidValues.length" + oidValues.size );
+};
 
-	for(oidElement in config.oids){
-		//log(config.oids[oid]);
-		//getResource(Array.from(config.oids[oid]));
-		let oidKey = config.oids[oidElement] ;
-		oidArray.push(oidKey);
-	}
+function getResource(oids){
 
 	session.get (oids, function (error, varbinds){
 		log("In session.get(), oids.length = " + oids.length);		
