@@ -6,7 +6,7 @@ const snmpConnectionConfig = require('../../config/config.json');
 
 //const statistics = require('../../lib/statistics/index.js');
 
-exports.getStatistics = function (snmpConnectionSettings, oids) {
+exports.getStatistics = function (snmpConnectionSettings, oids, debug) {
 
     let config = {
         snmpConnectionSettings: function() {
@@ -28,11 +28,13 @@ exports.getStatistics = function (snmpConnectionSettings, oids) {
         }
     };
 
-    snmpConnectionSettings = config.snmpConnectionSettings();
-    oids = config.oids();
+    if(debug == false || debug === undefined ){
+        snmpConnectionSettings = config.snmpConnectionSettings();
+        oids = config.oids();
+    }
 
     if(snmpConnectionSettings == undefined)
-        throw "Error: Undefined snmp ConnectionSettings";
+        throw new Error("Error: Undefined snmp ConnectionSettings");
 
     try{
         logger.log("in Services");
@@ -41,7 +43,7 @@ exports.getStatistics = function (snmpConnectionSettings, oids) {
     }
     catch(error){
         logger.log(error);
-        throw "Error: Unexpected error in Service-Statistics";
+        throw new Error("Error: Unexpected error in Service-Statistics");
     }
 };
 
