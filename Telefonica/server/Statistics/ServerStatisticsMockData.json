@@ -1,0 +1,17 @@
+{
+	"stats":{
+		"averageLoadInMins": {
+			"one":"11",
+			"five":"55",
+			"fifteen":"155"
+		},
+		"ram": {
+			"total": "8",
+			"Used":"2",
+			"free":"6",
+			"shared":"1",
+			"buffered":"0.2",
+			"cached":"0.1"
+		}
+	}
+}

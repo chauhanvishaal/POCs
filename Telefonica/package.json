@@ -1,0 +1,22 @@
+{
+  "name": "telefonica",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "Q": "^0.0.1",
+    "debug": "^2.2.0",
+    "net-snmp": "^1.1.19"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "snmp",
+    "oid",
+    "node"
+  ],
+  "author": "vishal",
+  "license": "ISC"
+}
