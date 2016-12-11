@@ -3,27 +3,26 @@
 <head>
 	<title>ToDo</title>
 </head>
-<body ng-app='todoApp' ng-controller="TodoController">
+<body ng-app='todoApp' ng-controller="TodoController as ctrl1">
 <h1>ToDo List</h1>
 
 <!-- {{todoList[0].desc}} -->
-<div ng-repeat="todoitem in todoList track by todoitem.id">
+<div ng-repeat="todoitem in ctrl1.todoList track by todoitem.id">
 	<span>{{todoitem.id}}</span> 
 	<span ng-switch on="todoitem.editable">
 		<span ng-switch-default>{{todoitem.desc}}</span> 
 		<input  ng-switch-when="true" type="text" name="" ng-model="todoitem.desc"/>
 	</span>
 	<input type="checkbox" ng-checked= {{todoitem.status}}  name=""/>
-	<input type="button" value="edit" name="" ng-click="edit(todoitem.id)">
-	<input type="button" value="delete" name="" ng-click="delete(todoitem.id)">
+	<input type="button" value="edit" name="" ng-click="ctrl1.edit(todoitem.id)">
+	<input type="button" value="delete" name="" ng-click="ctrl1.delete(todoitem.id)">
 
 </div>
 <div>
-	<input type="button" name="" value="Add" ng-click="add()">
+	<input type="button" name="" value="Add" ng-click="ctrl1.add()">
 </div>
-<!-- <script type="text/javascript" src='node_modules/angular/angular.js'></script> -->
 <script type="text/javascript" src='builds/bundle.js'></script>
+<!-- <script type="text/javascript" src='node_modules/angular/angular.js'></script> -->
 <!-- <script src='index.js'></script> -->
-
 </body>
 </html>
