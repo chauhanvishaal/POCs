@@ -18,7 +18,7 @@ module.exports = function TodoController($scope){
 		let editable = false;
 		let todoCount =  this.todoList.length ;
 		let currentItemId = -1;
-
+		let originalDesc ='';
 		this.add = function(){
 			let item  = { 'desc':'newItem',
 							 //'id': 4 ,
@@ -34,11 +34,21 @@ module.exports = function TodoController($scope){
 			this.todoList.push(item);
 		}
 
-		this.edit = function (id){
+		this.edit = function (selectedRow){
 			//$scope.editable = !$scope.editable ;
-			currentItemId = id;
-			let itemIndex = this.todoList.findIndex(findById, id) ;
+			currentItemId = selectedRow.id ; //id;
+			let itemIndex = this.todoList.findIndex(findById, currentItemId) ;
+			originalDesc = this.todoList[itemIndex].desc;
 			this.todoList[itemIndex].editable = !this.todoList[itemIndex].editable ;
+
+		}
+
+		this.cancel = function (selectedRow){
+			//$scope.editable = !$scope.editable ;
+			currentItemId = selectedRow.id ; //id;
+			let itemIndex = this.todoList.findIndex(findById, currentItemId) ;
+			this.todoList[itemIndex].desc = originalDesc ;
+			this.todoList[itemIndex].editable = false;
 
 		}
 

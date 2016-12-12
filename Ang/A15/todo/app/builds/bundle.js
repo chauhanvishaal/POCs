@@ -58,13 +58,15 @@
 
 	_angular2.default.module('todoApp', []);
 
+	__webpack_require__(3);
 	//using ES5
-	var TodoController = __webpack_require__(3);
+	var TodoController = __webpack_require__(4);
 
 	//Using ES6 syntax
 	//import {TodoController} from './TodoControllerES6';
 
 	_angular2.default.module('todoApp').controller('TodoController', TodoController);
+
 	//TodoController.$inject = ['$scope'];
 
 /***/ },
@@ -32466,6 +32468,62 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_angular2.default.module('todoApp').directive("clickToEdit", function () {
+	    var editorTemplate = '<div>\n            <div ng-hide="view.editorEnabled"> \n                <input type = button value = Edit ng-click="enableEditor()"/> \n            </div> \n            <div ng-show="view.editorEnabled"> \n                <input type = button value = Save ng-click="disableAndSave()"/>\n                <input type = button value = Cancel ng-click="disableEditor()"/>\n            </div> \n        </div>';
+
+	    return {
+	        restrict: "A",
+	        replace: true,
+	        template: editorTemplate,
+	        scope: {
+	            edit: '&onEdit',
+	            cancel: '&onCancel',
+	            save: '&onSave',
+	            value: "=clickToEdit"
+	        },
+	        link: function link(scope, element, attrs) {
+	            scope.view = {
+	                editableValue: scope.value,
+	                editorEnabled: false
+	            };
+
+	            scope.enableEditor = function () {
+	                scope.view.editorEnabled = true;
+	                //scope.view.editableValue = scope.value;
+	                scope.edit({ 'id': scope.value });
+	                //element.find('input')[0].focus();
+	                setTimeout(function () {
+	                    element.find('input')[0].focus();
+	                    document.getElementById('tododesc' + scope.value).focus();
+	                    //element.find('input').focus().select(); // w/ jQuery
+	                });
+	            };
+
+	            scope.disableEditor = function () {
+	                scope.view.editorEnabled = false;
+	                scope.cancel({ 'id': scope.value });
+	            };
+
+	            scope.disableAndSave = function () {
+	                scope.view.editorEnabled = false;
+	                scope.save({ 'id': scope.value });
+	            };
+	        }
+	    };
+	});
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32485,7 +32543,7 @@
 		var editable = false;
 		var todoCount = this.todoList.length;
 		var currentItemId = -1;
-
+		var originalDesc = '';
 		this.add = function () {
 			var item = { 'desc': 'newItem',
 				//'id': 4 ,
@@ -32500,11 +32558,20 @@
 			this.todoList.push(item);
 		};
 
-		this.edit = function (id) {
+		this.edit = function (selectedRow) {
 			//$scope.editable = !$scope.editable ;
-			currentItemId = id;
-			var itemIndex = this.todoList.findIndex(findById, id);
+			currentItemId = selectedRow.id; //id;
+			var itemIndex = this.todoList.findIndex(findById, currentItemId);
+			originalDesc = this.todoList[itemIndex].desc;
 			this.todoList[itemIndex].editable = !this.todoList[itemIndex].editable;
+		};
+
+		this.cancel = function (selectedRow) {
+			//$scope.editable = !$scope.editable ;
+			currentItemId = selectedRow.id; //id;
+			var itemIndex = this.todoList.findIndex(findById, currentItemId);
+			this.todoList[itemIndex].desc = originalDesc;
+			this.todoList[itemIndex].editable = false;
 		};
 
 		this.delete = function (id) {

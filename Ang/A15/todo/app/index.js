@@ -6,6 +6,7 @@
 import angular from 'angular';
 angular.module('todoApp',[]);
 
+require('./editButton/editButton');
 //using ES5
 var TodoController = require('./TodoController');
 
@@ -13,6 +14,7 @@ var TodoController = require('./TodoController');
 //import {TodoController} from './TodoControllerES6';
 
 angular.module('todoApp').controller('TodoController',TodoController);
+
 //TodoController.$inject = ['$scope'];
 
 

@@ -1,3 +1,7 @@
 #todoitem {
 	display: ;
 }
+
+.click-to-edit {
+	display: inline-block;
+}
