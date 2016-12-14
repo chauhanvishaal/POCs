@@ -46,8 +46,6 @@
 
 	'use strict';
 
-	//(function(){
-	//var $ = require('jquery');
 	//require('./node_modules/angular/angular.js');
 
 	var _angular = __webpack_require__(1);
@@ -59,15 +57,7 @@
 	_angular2.default.module('todoApp', []);
 
 	__webpack_require__(3);
-	//using ES5
-	var TodoController = __webpack_require__(4);
-
-	//Using ES6 syntax
-	//import {TodoController} from './TodoControllerES6';
-
-	_angular2.default.module('todoApp').controller('TodoController', TodoController);
-
-	//TodoController.$inject = ['$scope'];
+	__webpack_require__(6);
 
 /***/ },
 /* 1 */
@@ -32478,11 +32468,34 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_angular2.default.module('todoApp').directive("clickToEdit", function () {
+	__webpack_require__(4);
+	//using ES5
+	var TodoController = __webpack_require__(5);
+
+	//Using ES6 syntax
+	//import {TodoController} from './TodoControllerES6';
+
+	_angular2.default.module('todoApp').controller('TodoController', TodoController);
+
+	//TodoController.$inject = ['$scope'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_angular2.default.module('todoApp').directive("clickToEdit", ["$document", function ($document) {
 	    var editorTemplate = '<div>\n            <div ng-hide="view.editorEnabled"> \n                <input type = button value = Edit ng-click="enableEditor()"/> \n            </div> \n            <div ng-show="view.editorEnabled"> \n                <input type = button value = Save ng-click="disableAndSave()"/>\n                <input type = button value = Cancel ng-click="disableEditor()"/>\n            </div> \n        </div>';
 
 	    return {
-	        restrict: "A",
+	        restrict: "AE",
 	        replace: true,
 	        template: editorTemplate,
 	        scope: {
@@ -32491,20 +32504,29 @@
 	            save: '&onSave',
 	            value: "=clickToEdit"
 	        },
-	        link: function link(scope, element, attrs) {
+	        //transclude: true,
+	        link: function link(scope, element, attrs, ctrl, transclude) {
 	            scope.view = {
 	                editableValue: scope.value,
 	                editorEnabled: false
 	            };
-
+	            //need to use first element cause zero element is empty space
+	            //element.children()[0].append(transclude()[1]);
 	            scope.enableEditor = function () {
 	                scope.view.editorEnabled = true;
 	                //scope.view.editableValue = scope.value;
 	                scope.edit({ 'id': scope.value });
-	                //element.find('input')[0].focus();
+
+	                //$document is jqlite document a subset of window.document. cant find by id only by element
+	                //so below line of code wont work.
+	                //$document.getElementById('tododesc'+ scope.value).focus();
+
+	                //Javascript function to focus on input element
 	                setTimeout(function () {
-	                    element.find('input')[0].focus();
-	                    document.getElementById('tododesc' + scope.value).focus();
+	                    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : scope.value;
+
+	                    //element.find('input')[0].focus();
+	                    document.getElementById('tododesc' + id).focus();
 	                    //element.find('input').focus().select(); // w/ jQuery
 	                });
 	            };
@@ -32520,13 +32542,15 @@
 	            };
 	        }
 	    };
-	});
+	}]);
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
+
+	//Transclusion - http://teropa.info/blog/2015/06/09/transclusion.html
 
 	module.exports = function TodoController($scope) {
 
@@ -32584,6 +32608,25 @@
 			if (element.id === this) return element;
 		}
 	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	angular.module('todoApp').controller('ContactController', [function () {
+		var vm = this;
+		vm.contactMaster = {};
+		vm.contact = {};
+		vm.save = function (contact) {
+			vm.contactMaster = angular.copy(contact);
+		};
+
+		vm.reset = function () {
+			vm.contact = vm.contactMaster;
+		};
+	}]);
 
 /***/ }
 /******/ ]);

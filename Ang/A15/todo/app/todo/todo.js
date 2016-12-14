@@ -1,12 +1,8 @@
 'use strict'
 
-//(function(){
-//var $ = require('jquery');
-//require('./node_modules/angular/angular.js');
 import angular from 'angular';
-angular.module('todoApp',[]);
 
-require('./editButton/editButton');
+require('../editButton/editButton');
 //using ES5
 var TodoController = require('./TodoController');
 

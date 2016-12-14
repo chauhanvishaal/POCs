@@ -1,0 +1,14 @@
+<div ng-controller="ContactController as ContactCtrl">
+<h2>Contact Form</h2>
+	<form novalidate class="contact-form">
+	
+		<label>Name: <input type='text' ng-model='ContactCtrl.contact.name' required="" /></label><br/>
+		<label>E-mail: <input type='text' ng-model='ContactCtrl.contact.email' required/></label><br/>
+		<label>Gender: male<input type='radio' ng-model='ContactCtrl.contact.gender' value='male'/></label><br/>
+		<label>female<input type='radio' ng-model='ContactCtrl.contact.gender' value='female'/></label><br/>
+		<input type="button" value="Save" ng-click="ContactCtrl.save(ContactCtrl.contact)" name="">
+		<input type="button" value="Reset" ng-click="ContactCtrl.reset()" name="">
+	</form>
+	<pre>contact = {{ContactCtrl.contact | json }}</pre>
+	<pre>contact master = {{ContactCtrl.contactMaster | json }}</pre>
+</div>

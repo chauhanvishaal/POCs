@@ -5,3 +5,11 @@
 .click-to-edit {
 	display: inline-block;
 }
+
+.contact-form input.ng-invalid.ng-touched{
+	background-color: #FA787E;
+}
+
+.contact-form input.ng-valid.ng-touched {
+	background-color: #78FA89 ;
+}

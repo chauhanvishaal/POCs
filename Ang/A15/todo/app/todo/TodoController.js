@@ -1,3 +1,5 @@
+//Transclusion - http://teropa.info/blog/2015/06/09/transclusion.html
+
 module.exports = function TodoController($scope){
 		
 		this.todoList = 

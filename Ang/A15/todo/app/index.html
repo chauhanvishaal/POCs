@@ -4,36 +4,18 @@
 <link rel="stylesheet" type="text/css" href="app.css">
 	<title>ToDo</title>
 </head>
-<body ng-app='todoApp' ng-controller="TodoController as ctrl1">
-<h1>ToDo List</h1>
-
-<div>
-	<input type="button" name="" value="Add" ng-click="ctrl1.add()">
-</div>
-<div ng-cloak ng-repeat="todoitem in ctrl1.todoList track by todoitem.id">
-	<span>{{todoitem.id}}</span> 
-	<span ng-switch on="todoitem.editable">
-		<span ng-switch-default>{{todoitem.desc}}</span> 
-		<input id= "{{'tododesc' + todoitem.id}}" ng-switch-when="true" type="text" name="" ng-model="todoitem.desc"/>
-	</span>
-	<input id= "{{'todoeditable-' + todoitem.id}}" type="checkbox" ng-checked= {{todoitem.status}}  name=""/>
-
-	<!-- 
-	<input type="button" value="edit" name="" ng-click="ctrl1.edit(todoitem.id)">
+<body ng-app='todoApp'>
+	<nav>
+		<a href="index.html">Home</a>
+	</nav>
 	
-	-->
-
-	<div click-to-edit="todoitem.id" class="click-to-edit"
-		on-cancel="ctrl1.cancel({'id':todoitem.id})" 
-		on-edit='ctrl1.edit({id:todoitem.id})' 									 
-		on-save='ctrl1.edit({id:todoitem.id})'>
-
-	</div>
-	<input type="button" value="delete" name="" ng-click="ctrl1.delete(todoitem.id)"> 
-</div>
-
+	<!-- Using ng-include for Html Template embedding -->
+	<div ng-include="'todo/todoView.html'"></div>
+	<!-- or
+	<ng-include src="'todo/todoView.html'" scope="" onload=""></ng-include> -->
+	<ng-include src="'contact/contact.html'" scope="" onload=""></ng-include>
 <script type="text/javascript" src='builds/bundle.js'></script>
 <!-- <script type="text/javascript" src='node_modules/angular/angular.js'></script> -->
-<!-- <script src='index.js'></script> -->
+<!-- <script src='todo/todo.js'></script> -->
 </body>
 </html>
