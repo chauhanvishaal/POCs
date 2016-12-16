@@ -32620,7 +32620,7 @@
 		vm.contactMaster = {};
 		vm.contact = {};
 		vm.save = function (contact) {
-			vm.contactMaster = angular.copy(contact);
+			vm.contactMaster = angular.copy(vm.contact);
 		};
 
 		vm.reset = function () {
